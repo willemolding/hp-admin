@@ -1,17 +1,13 @@
 import React from 'react'
 import { isEmpty } from 'lodash'
 import './HappHosting.module.css'
-import Button from 'components/Button'
+import Header from 'components/Header'
 
 export default function HappHosting ({ allAvailableHapps = [], history: { push } }) {
   const sortedHapps = allAvailableHapps.sort((a, b) => a.isEnabled ? -1 : b.isEnabled ? 1 : 0)
-  const goToMenu = () => push('/menu')
 
   return <div>
-    <div styleName='header'>
-      <span styleName='title'>hApps</span>
-      <Button onClick={goToMenu} styleName='menu-button'>Menu</Button>
-    </div>
+    <Header title='hApps' {...push} />
 
     {!isEmpty(sortedHapps) && <div styleName='happ-list' role='list'>
       {sortedHapps.map(happ => <HappRow happ={happ} key={happ.id} />)}
