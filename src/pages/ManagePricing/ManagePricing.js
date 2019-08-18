@@ -1,9 +1,12 @@
 import React, { useState, useEffect } from 'react'
+import { useQuery } from '@apollo/react-hooks'
 import './ManagePricing.module.css'
 import Button from 'components/Button'
 import { UNITS } from 'models/HostPricing'
+import HostPricingQuery from 'graphql/HostPricingQuery.gql'
 
-export default function ManagePricing ({ hostPricing, updateHostPricing, history: { push } }) {
+function ManagePricing ({ updateHostPricing, history: { push } }) {
+  const { data: { hostPricing } } = useQuery(HostPricingQuery)
   const goToMenu = () => push('/menu')
 
   const [units, setUnits] = useState('')
@@ -64,3 +67,5 @@ export default function ManagePricing ({ hostPricing, updateHostPricing, history
 
   </div>
 }
+
+export default ManagePricing

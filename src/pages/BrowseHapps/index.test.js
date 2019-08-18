@@ -1,6 +1,6 @@
 import React from 'react'
 import { render, fireEvent, within } from '@testing-library/react'
-import { ApolloProvider } from 'react-apollo'
+import { ApolloProvider } from '@apollo/react-hooks'
 import apolloClient from 'apolloClient'
 import ConnectedBrowseHapps from './index'
 import { appOne as appHoloFuel, appTwo as appHylo } from 'mock-dnas/happStore'

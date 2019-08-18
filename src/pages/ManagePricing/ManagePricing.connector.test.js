@@ -1,6 +1,6 @@
 import React from 'react'
 import { render } from '@testing-library/react'
-import { MockedProvider } from 'react-apollo/test-utils'
+import { MockedProvider } from '@apollo/react-testing'
 import wait from 'waait'
 import HostPricingQuery from 'graphql/HostPricingQuery.gql'
 import connector from './ManagePricing.connector'

@@ -1,11 +1,11 @@
 
-import { graphql, compose } from 'react-apollo'
-import HostPricingQuery from 'graphql/HostPricingQuery.gql'
+import { graphql } from '@apollo/react-hoc'
+import { flowRight as compose } from 'lodash'
 import UpdateHostPricingMutation from 'graphql/UpdateHostPricingMutation.gql'
 
-const hostPricing = graphql(HostPricingQuery, {
-  props: ({ data: { hostPricing } }) => ({ hostPricing })
-})
+// const hostPricing = graphql(HostPricingQuery, {
+//   props: ({ data: { hostPricing } }) => ({ hostPricing })
+// })
 
 const updateHostPricing = graphql(UpdateHostPricingMutation, {
   props: ({ mutate }) => ({
@@ -19,6 +19,6 @@ const updateHostPricing = graphql(UpdateHostPricingMutation, {
 })
 
 export default compose(
-  hostPricing,
+  // hostPricing,
   updateHostPricing
 )
