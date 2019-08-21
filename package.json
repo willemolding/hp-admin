@@ -10,6 +10,7 @@
     "test": "npm run test:lint && npm run test:unit",
     "test:lint": "standard",
     "test:unit": "node scripts/test.js",
+    "test:integration": "node scripts/test.js",
     "ci": "CI=1 npm run test:unit"
   },
   "dependencies": {
