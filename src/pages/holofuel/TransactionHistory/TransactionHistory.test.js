@@ -128,23 +128,16 @@ describe('HoloFuel Ledger Transactions', () => {
         semanticOverAYear: '2000-08-30T11:17:16+00:00'
       }
 
-      // const genDateFormat = isodate => {
-      //   const date = new Date(isodate)
-      //   const newDate = (date.getMonth() + 1) + '/' + date.getDate() + '/' + date.getFullYear() + ' at ' + date.getHours() + ':' + date.getMinutes() + ':' + date.getSeconds()
-      //   return newDate
-      // }
-      // console.log('Date-time Check : ', genDateFormat(MOCK_TIMEDATE.semanticSameYear))
-
       it('should format timedate within past year', () => {
         const { date, time } = formatDateTime(MOCK_TIMEDATE.semanticOverAYear)
         expect(date).toBe('August 30 2000')
-        expect(time).toBe('6:17')
+        expect(time).toBe('11:17')
       })
 
       it('should format timedate within past year', () => {
         const { date, time } = formatDateTime(MOCK_TIMEDATE.semanticSameYear)
         expect(date).toBe('August 30')
-        expect(time).toBe('6:17')
+        expect(time).toBe('11:17')
       })
 
       it('should format timedate within same day', () => {

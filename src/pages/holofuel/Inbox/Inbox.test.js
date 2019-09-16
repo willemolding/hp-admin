@@ -89,51 +89,50 @@ describe('TransactionRow', () => {
     expect(getByText('Reject')).toBeInTheDocument()
   })
 
-  const mockTransaction = {
-    ...request,
-    direction: '',
-    status: ''
-  }
-
-  const offerMock = {
-    request: {
-      query: HolofuelOfferMutation,
-      variables: { amount: request.amount, counterparty: request.counterparty, requestId: request.id }
-    },
-    result: {
-      data: { holofuelOffer: mockTransaction }
-    },
-    newData: jest.fn()
-  }
-
-  const acceptOfferMock = {
-    request: {
-      query: HolofuelAcceptOfferMutation,
-      variables: { transactionId: offer.id }
-    },
-    result: {
-      data: { holofuelAcceptOffer: mockTransaction }
-    },
-    newData: jest.fn()
-  }
-
-  const mocks = [
-    offerMock,
-    acceptOfferMock,
-    {
-      request: {
-        query: HolofuelActionableTransactionsQuery
-      },
-      result: {
-        data: {
-          holofuelActionableTransactions: []
-        }
-      }
-    }
-  ]
-
   describe('Pay and reject buttons', () => {
     it('respond properly', async () => {
+      const mockTransaction = {
+        ...request,
+        direction: '',
+        status: ''
+      }
+
+      const offerMock = {
+        request: {
+          query: HolofuelOfferMutation,
+          variables: { amount: request.amount, counterparty: request.counterparty, requestId: request.id }
+        },
+        result: {
+          data: { holofuelOffer: mockTransaction }
+        },
+        newData: jest.fn()
+      }
+
+      const acceptOfferMock = {
+        request: {
+          query: HolofuelAcceptOfferMutation,
+          variables: { transactionId: offer.id }
+        },
+        result: {
+          data: { holofuelAcceptOffer: mockTransaction }
+        },
+        newData: jest.fn()
+      }
+
+      const mocks = [
+        offerMock,
+        acceptOfferMock,
+        {
+          request: {
+            query: HolofuelActionableTransactionsQuery
+          },
+          result: {
+            data: {
+              holofuelActionableTransactions: []
+            }
+          }
+        }
+      ]
       const props = {
         transaction: request,
         showRejectionModal: jest.fn()
@@ -161,6 +160,49 @@ describe('TransactionRow', () => {
 
   describe('Accept button', () => {
     it('responds properly', async () => {
+      const mockTransaction = {
+        ...request,
+        direction: '',
+        status: ''
+      }
+  
+      const offerMock = {
+        request: {
+          query: HolofuelOfferMutation,
+          variables: { amount: request.amount, counterparty: request.counterparty, requestId: request.id }
+        },
+        result: {
+          data: { holofuelOffer: mockTransaction }
+        },
+        newData: jest.fn()
+      }
+  
+      const acceptOfferMock = {
+        request: {
+          query: HolofuelAcceptOfferMutation,
+          variables: { transactionId: offer.id }
+        },
+        result: {
+          data: { holofuelAcceptOffer: mockTransaction }
+        },
+        newData: jest.fn()
+      }
+  
+      const mocks = [
+        offerMock,
+        acceptOfferMock,
+        {
+          request: {
+            query: HolofuelActionableTransactionsQuery
+          },
+          result: {
+            data: {
+              holofuelActionableTransactions: []
+            }
+          }
+        }
+      ]
+      
       let getByText
       await act(async () => {
         ({ getByText } = render(<MockedProvider mocks={mocks} addTypename={false}>
