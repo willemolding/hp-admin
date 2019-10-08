@@ -18,7 +18,7 @@ type HhaUser {
 type Happ {
   id: ID
   title: String
-  description: String  
+  description: String
   thumbnailUrl: String
   homepageUrl: String
   dnaHash: String
@@ -32,14 +32,69 @@ type HostPricing {
   pricePerUnit: String
 }
 
+type HolofuelUser {
+  id: ID
+  nickname: String
+}
+
+enum TransactionType {
+  offer
+  request
+}
+
+enum TransactionStatus {
+  pending
+  completed
+  rejected
+  cancelled
+}
+
+enum TransactionDirection {
+  incoming # indicates the recipient of funds
+  outgoing # indicates the spender of funds
+}
+
+type Transaction {
+  id: ID # ID will be the originCommitHash
+  amount: Float
+  counterparty: String # HolofuelUser
+  direction: TransactionDirection
+  status: TransactionStatus
+  type: TransactionType
+  timestamp: String
+  fees: Float
+  presentBalance: Float
+  notes: String 
+}
+
+type Ledger {
+  balance: Float
+  credit: Float
+  payable: Float
+  receivable: Float
+  fees: Float
+}
+
+type HposSettings {
+  version: String
+}
+
 type Query {
   me: Me
   happStoreUser: HappStoreUser
   hostingUser: HhaUser
-  allHapps: [Happ]
-  allAvailableHapps: [Happ]
-  allHostedHapps: [Happ]
+  happs: [Happ]
+  happ(id: String!): Happ
   hostPricing: HostPricing
+  holofuelCompletedTransactions: [Transaction]
+  holofuelWaitingTransactions: [Transaction]
+  holofuelActionableTransactions: [Transaction]
+  holofuelLedger: Ledger
+  holofuelUser: HolofuelUser
+  holofuelCounterparty(agentId: String!): HolofuelUser
+  holofuelHistoryCounterparties: [HolofuelUser]
+  holofuelInboxCounterparties: [HolofuelUser]
+  hposSettings: HposSettings
 }
 
 type Mutation {
@@ -48,4 +103,10 @@ type Mutation {
   enableHapp(appId: String): Happ
   disableHapp(appId: String): Happ
   updateHostPricing(units: String, pricePerUnit: String): HostPricing
+  holofuelRequest(counterparty:String, amount:Float): Transaction
+  holofuelOffer(counterparty:String, amount:Float, requestId:ID): Transaction
+  holofuelAcceptOffer(transactionId: ID): Transaction 
+  holofuelDecline(transactionId: ID): Transaction
+  holofuelCancel(transactionId: ID): Transaction
+  hposUpdateSettings(version: String): HposSettings
 }

@@ -1,0 +1,85 @@
+####
+# NOTE: This File is for exclusively running the holofuel DNA with two agents.
+##
+# * Copy this file to conductor-config.toml and generate a unique agent key for each of the `agents` fields below:
+#
+# * Steps for creating an agent:
+#    1. Run `hc keygen -n --path keystores/myagent.keystore`
+#    2. Copy the public address hash and paste it as the value for the agent's `public_address`
+####
+
+# -- All Agents
+[[agents]]
+id = "hp_admin_agent_1"
+name = "HP Admin Agent One"
+public_address = "<PUBLIC_ADDRESS_FOR_AGENT_ONE>"
+keystore_file = "keystores/myagent.keystore"
+
+[[agents]]
+id = "hp_admin_agent_2"
+name = "HP Admin Agent Two"
+public_address = "<PUBLIC_ADDRESS_FOR_AGENT_TWO>"
+keystore_file = "keystores/myagent.keystore"
+
+# -- All DNAs
+[[dnas]]
+id = "holofuel_dna"
+file = "/PATH/TO/holofuel.dna.json" # Be sure to point to the version tied to hc v28-alpha1
+hash = "QmeTGfQmKxdVa2ocEFNamo8vZK7QVKZYvQp9BkTQYvjnzm" # This is the hash tied to hc v28-alpha1
+
+# -- Agent Instances for each DNA
+[[instances]]
+id = "holofuel"
+dna = "holofuel_dna"
+agent = "hp_admin_agent_1"
+
+  [instances.logger]
+  type = "simple"
+  file = "app_spec.log"
+
+  [instances.storage]
+  type = "file"
+  path = "tmp/tmp-storage-agent1-1"
+
+[[instances]]
+id = "holofuel2"
+dna = "holofuel_dna"
+agent = "hp_admin_agent_2"
+
+  [instances.logger]
+  type = "simple"
+  file = "app_spec.log"
+
+  [instances.storage]
+  type = "file"
+  path = "tmp/tmp-storage-agent2-1"
+
+# -- WS-RPC interface
+[[interfaces]]
+id = "websocket-interface"
+
+    [interfaces.driver]
+    type = "websocket"
+    port = 3400
+
+    [[interfaces.instances]]
+    id = "holofuel"
+
+    [[interfaces.instances]]
+    id = "holofuel2"
+
+# -- HTTP admin interface (currently only used for testing the conductor is running in setup script)
+[[interfaces]]
+id = 'http-interface'
+admin = true
+
+    [interfaces.driver]
+    type = "http"
+    port = 3300
+
+    [[interfaces.instances]]
+    id = "holofuel"
+
+    [[interfaces.instances]]
+    id = "holofuel2"
+

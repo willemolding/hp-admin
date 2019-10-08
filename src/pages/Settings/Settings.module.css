@@ -1,0 +1,47 @@
+/* Menu */
+
+.title {
+  font-style: normal;
+  font-weight: bold;
+  font-size: 24px;
+  line-height: 28px;
+  letter-spacing: 0.02em;
+  color: #484848;
+}
+
+/* page */
+
+.settings-form {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  margin-bottom: 20px;
+  border-radius: 10px;
+}
+
+/* form */
+
+
+.input-list {
+  padding-top: 20px;
+}
+
+.field-error {
+  font-size: .9em;
+  font-weight: 500;
+  color: #a00;
+  margin: .3em 0 .0;
+}
+
+
+/* icons */
+
+.side-icon {
+  display: inline-block;
+  padding-left: 5px;
+}
+
+.settingsLabel {
+  padding: 5px;
+}
+
