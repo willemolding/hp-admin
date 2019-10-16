@@ -21,13 +21,13 @@
 tmp-storage
 tmp
 conductor-config.toml
-holofuel-conductor-config.toml
 keystores
 
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 yarn.lock
+config.nix
 .holochain
 conductor.log
 conductor.pid

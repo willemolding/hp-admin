@@ -1,5 +1,6 @@
 import React from 'react'
-import { fireEvent, act, within } from '@testing-library/react'
+import Modal from 'react-modal'
+import { render, fireEvent, act, within } from '@testing-library/react'
 import wait from 'waait'
 import { ApolloProvider } from '@apollo/react-hooks'
 import { MockedProvider } from '@apollo/react-testing'
@@ -9,7 +10,6 @@ import Inbox, { TransactionRow, RenderNickname } from './Inbox'
 import { pendingList } from 'mock-dnas/holofuel'
 import { TYPE } from 'models/Transaction'
 import { presentAgentId, presentHolofuelAmount } from 'utils'
-import { renderAndWait } from 'utils/test-utils'
 import HolofuelOfferMutation from 'graphql/HolofuelOfferMutation.gql'
 import HolofuelAcceptOfferMutation from 'graphql/HolofuelAcceptOfferMutation.gql'
 import HolofuelDeclineMutation from 'graphql/HolofuelDeclineMutation.gql'
@@ -40,9 +40,14 @@ jest.mock('holofuel/contexts/useFlashMessageContext')
 
 describe('Inbox Connected (with Agent Nicknames)', () => {
   it('renders', async () => {
-    const { getAllByRole } = await renderAndWait(<ApolloProvider client={apolloClient}>
-      <Inbox />
-    </ApolloProvider>, 15)
+    let getAllByRole
+
+    await act(async () => {
+      ({ getAllByRole } = render(<ApolloProvider client={apolloClient}>
+        <Inbox />
+      </ApolloProvider>))
+      await wait(15)
+    })
 
     const listItems = getAllByRole('listitem')
     expect(listItems).toHaveLength(2)
@@ -79,9 +84,13 @@ describe('TransactionRow', () => {
   }
 
   it('renders a request', async () => {
-    const { getByText } = await renderAndWait(<MockedProvider addTypename={false}>
-      <TransactionRow transaction={request} />
-    </MockedProvider>, 0)
+    let getByText
+    await act(async () => {
+      ({ getByText } = render(<MockedProvider addTypename={false}>
+        <TransactionRow transaction={request} />
+      </MockedProvider>))
+      await wait(0)
+    })
 
     expect(getByText(request.timestamp.format('MMM D YYYY'))).toBeInTheDocument()
     expect(getByText(request.timestamp.utc().format('kk:mm UTC'))).toBeInTheDocument()
@@ -93,9 +102,13 @@ describe('TransactionRow', () => {
   })
 
   it('renders an offer', async () => {
-    const { getByText } = await renderAndWait(<MockedProvider addTypename={false}>
-      <TransactionRow transaction={offer} />
-    </MockedProvider>, 0)
+    let getByText
+    await act(async () => {
+      ({ getByText } = render(<MockedProvider addTypename={false}>
+        <TransactionRow transaction={offer} />
+      </MockedProvider>))
+      await wait(0)
+    })
 
     expect(getByText(request.timestamp.format('MMM D YYYY'))).toBeInTheDocument()
     expect(getByText(request.timestamp.utc().format('kk:mm UTC'))).toBeInTheDocument()
@@ -167,9 +180,13 @@ describe('TransactionRow', () => {
         transaction: request,
         showConfirmationModal: jest.fn()
       }
-      const { getByText } = await renderAndWait(<MockedProvider mocks={mocks} addTypename={false}>
-        <TransactionRow {...props} />
-      </MockedProvider>, 0)
+      let getByText
+      await act(async () => {
+        ({ getByText } = render(<MockedProvider mocks={mocks} addTypename={false}>
+          <TransactionRow {...props} />
+        </MockedProvider>))
+        await wait(0)
+      })
 
       await act(async () => {
         fireEvent.click(getByText('Pay'))
@@ -186,9 +203,13 @@ describe('TransactionRow', () => {
 
   describe('Accept button', () => {
     it('responds properly', async () => {
-      const { getByText } = await renderAndWait(<MockedProvider mocks={mocks} addTypename={false}>
-        <TransactionRow transaction={offer} />
-      </MockedProvider>, 0)
+      let getByText
+      await act(async () => {
+        ({ getByText } = render(<MockedProvider mocks={mocks} addTypename={false}>
+          <TransactionRow transaction={offer} />
+        </MockedProvider>))
+        await wait(0)
+      })
 
       await act(async () => {
         fireEvent.click(getByText('Accept'))
@@ -239,9 +260,14 @@ describe('TransactionRow', () => {
       counterpartyQueryMockError
     ]
 
-    const { getByText } = await renderAndWait(<MockedProvider mocks={mocks} addTypename={false}>
-      <RenderNickname agentId={rowContent.counterparty} className='mock-style' />
-    </MockedProvider>, 0)
+    let container, getByText
+    await act(async () => {
+      ({ container, getByText } = render(<MockedProvider mocks={mocks} addTypename={false}>
+        <RenderNickname agentId={rowContent.counterparty} className='mock-style' />
+      </MockedProvider>))
+      await wait(0)
+      Modal.setAppElement(container)
+    })
 
     const nameDiv = getByText(presentAgentId(rowContent.counterparty))
     expect(nameDiv).toBeInTheDocument()

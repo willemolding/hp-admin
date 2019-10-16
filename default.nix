@@ -5,25 +5,10 @@ with pkgs;
 let
   config = import ./config.nix;
 
-  run-unit-test = pkgs.writeShellScriptBin "run-unit-test"
+  hp-test = pkgs.writeShellScriptBin "hp-test"
   ''
-    ( rm -rf node_modules  ) \
-    &&  npm install --build-from-source  \
-    && npm run test:all
-  '';
-
-  build-hp-admin = pkgs.writeShellScriptBin "build-hp-admin"
-  ''
-    ( rm -rf node_modules  ) \
-    &&  npm install --build-from-source  \
-    && npm run build
-  '';
-
-  build-holofuel = pkgs.writeShellScriptBin "build-holofuel"
-  ''
-    ( rm -rf node_modules  ) \
-    &&  npm install --build-from-source  \
-    && npm run build:holofuel
+   ( npm install --build-from-source  ) \
+   && npm run test
   '';
 
   dnaConfig = dna: {
@@ -42,16 +27,16 @@ let
   multiInstanceConfig = dna: map (agent: {
     agent = agent.id;
     dna = dna.name;
-    id = agent.public_address+"::<happ_id>-"+dna.name;
+    id = dna.name+"::"+agent.id;
     storage = {
-      path = ".holochain/holo/storage/${agent.public_address+"::<happ_id>-"+dna.name}";
+      path = ".holochain/holo/storage/${dna.name+"::"+agent.id}";
       type = "file";
     };
   }) config.agents;
 
 
   multiInterfaceInstanceConfig = dna: map (agent: {
-    id = agent.public_address+"::<happ_id>-"+dna.name;
+    id = dna.name+"::"+agent.id;
   }) config.agents;
 
   flatten = x:
@@ -75,8 +60,16 @@ in
     nativeBuildInputs = [
       holochain-cli
       holochain-conductor
+      hp-test
       nodejs-12_x
       pkgconfig
+    ];
+
+    checkPhase = ''
+      npm run test:unit
+    '';
+
+    buildInputs = [
       cairo
       giflib
       libjpeg
@@ -85,30 +78,6 @@ in
       pango
       pixman
     ];
-
-    buildInputs = [
-      run-unit-test
-      build-hp-admin
-      build-holofuel
-    ];
-
-    preConfigure = ''
-    rm -rf node_modules
-    && npm install --build-from-source
-    '';
-
-    buildPhase = ''
-      npm run build
-    '';
-
-    installPhase = ''
-      mkdir $out
-      mv * $out
-    '';
-
-    checkPhase = ''
-      npm run test:all
-    '';
 
     doCheck = true;
   };
